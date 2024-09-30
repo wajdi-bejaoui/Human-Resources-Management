@@ -4,6 +4,7 @@ import Employees from './pages/dashboard/employees'
 import SignIn from './pages/auth/sign-in'
 import SignUp from './pages/auth/sign-up';
 import Home from './pages/dashboard/home';
+import Routes from './routes';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
     // <Employees />
     // <SignIn />
     // <SignUp />
-    <Home/>
+    // <Home/>
+    <Routes/>
   );
 }
 

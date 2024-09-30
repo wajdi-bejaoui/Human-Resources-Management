@@ -5,13 +5,44 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import axios from 'axios';
+
+
 
 
 export function SignUp() {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+  const [fullname, setFullName] = useState()
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true)
+      console.log({ fullname, email, password });
+      const response = await axios.post('http://localhost:3000/api/auth/register', { fullname, email, password });
+      console.log('Register success.')
+
+      console.log(response.data);  // handle success
+      setError()
+
+      setIsLoading(false)
+      navigate('/sign-in');
+
+    } catch (err) {
+      console.log(err)
+      // setError('Register failed. Please try again.');
+      setIsLoading(false)
+      setError(err.response.data.message)
+    }
+  };
+
   return (
     <section className="m-8 flex">
             <div className="w-2/5 h-full hidden lg:block">
@@ -25,8 +56,21 @@ export function SignUp() {
           <Typography variant="h2" className="font-bold mb-4">Join Us Today</Typography>
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to register.</Typography>
         </div>
-        <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
+        <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2" onSubmit={handleSubmit}>
+        {error && <p className="text-red-600 bg-red-100 border border-red-400 rounded p-2 mb-4">{error}</p>}
           <div className="mb-1 flex flex-col gap-6">
+          <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
+              Your name
+            </Typography>
+            <Input
+              onChange={(e) => setFullName(e.target.value)}
+              size="lg"
+              placeholder="john smith"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
               Your email
             </Typography>
@@ -34,6 +78,19 @@ export function SignUp() {
               onChange={(e) => setEmail(e.target.value)}
               size="lg"
               placeholder="name@mail.com"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
+             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
+              Password
+            </Typography>
+            <Input
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              size="lg"
+              placeholder="********"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
@@ -58,9 +115,19 @@ export function SignUp() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
+          
+
+          {!isLoading && <Button className="mt-6" fullWidth type="submit">
             Register Now
-          </Button>
+          </Button>}
+          {isLoading && <div className="mt-6 flex justify-center" fullWidth>
+          <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+          </svg>
+          </div>}
 
           <div className="space-y-4 mt-8">
             <Button size="lg" color="white" className="flex items-center gap-2 justify-center shadow-md" fullWidth>
@@ -79,14 +146,14 @@ export function SignUp() {
               </svg>
               <span>Sign in With Google</span>
             </Button>
-            <Button size="lg" color="white" className="flex items-center gap-2 justify-center shadow-md" fullWidth>
+            {/* <Button size="lg" color="white" className="flex items-center gap-2 justify-center shadow-md" fullWidth>
               <img src="/img/twitter-logo.svg" height={24} width={24} alt="" />
               <span>Sign in With Twitter</span>
-            </Button>
+            </Button> */}
           </div>
           <Typography variant="paragraph" className="text-center text-blue-gray-500 font-medium mt-4">
             Already have an account?
-            {/* <Link to="/auth/sign-in" className="text-gray-900 ml-1">Sign in</Link> */}
+            <Link to="/sign-in" className="text-gray-900 ml-1">Sign in</Link>
           </Typography>
         </form>
 

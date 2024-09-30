@@ -5,7 +5,7 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 
@@ -16,6 +16,8 @@ export function SignIn() {
   const [password, setPassword] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
 
 
   const handleSubmit = async (e) => {
@@ -27,11 +29,15 @@ export function SignIn() {
       console.log(response.data);  // handle success
       const { token } = response.data;
       localStorage.setItem('token', token);
+      setError()
+
       setIsLoading(false)
 
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      // setError('Login failed. Please check your credentials.');
       setIsLoading(false)
+      setError(err.response.data.message)
+
     }
   };
   return (
@@ -42,7 +48,7 @@ export function SignIn() {
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to Sign In.</Typography>
         </div>
         <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2" onSubmit={handleSubmit}>
-        {/* {error && <p>{error}</p>} */}
+        {error && <p className="text-red-600 bg-red-100 border border-red-400 rounded p-2 mb-4">{error}</p>}
 
           <div className="mb-1 flex flex-col gap-6">
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
@@ -146,7 +152,7 @@ export function SignIn() {
           </div> */}
           <Typography variant="paragraph" className="text-center text-blue-gray-500 font-medium mt-4">
             Not registered?
-            {/* <Link to="/auth/sign-up" className="text-gray-900 ml-1">Create account</Link> */}
+            <Link to="/sign-up" className="text-gray-900 ml-1">Create account</Link>
           </Typography>
         </form>
 

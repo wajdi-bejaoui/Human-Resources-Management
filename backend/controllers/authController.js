@@ -1,4 +1,4 @@
-const User = require("../models/User")
+const User = require("../models/User");
 const bcrypt = require ("bcrypt");
 const jwt = require ("jsonwebtoken");
 const express = require("express");
@@ -27,25 +27,25 @@ app.use(
           });
       
           if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User already exists' });
           }
          // Create a new user with the hashed password
          const newUser = new User({
              email: req.body.email,
              password: req.body.password,
              fullname: req.body.fullname,
-             role:req.body.role,
+             role:'employee',
          });
  
          // Save the user to the database
-         await newUser.save();
+         const user = await newUser.save();
         
 
-         res.json({ msg: 'Registered successfully' });
+         res.status(StatusCodes.CREATED).json({ message: 'Registered successfully', user });
     
      } catch (error) {
          console.error('Error during user registration:', error);
-         res.json({ msg: 'Internal server error' });
+         res.status(500).json({ message: 'Internal server error' });
      }
  };
  
@@ -61,7 +61,7 @@ const login = async (req, res) => {
       });
         // Email not found
         if (!existingUser) {
-            return res.json({ msg: "Please check your Email" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please check your Email" });
         }
         console.log(existingUser)
         // Compare passwords
@@ -71,7 +71,7 @@ const login = async (req, res) => {
         // Passwords do not match
         if (!isMatch) {
             console.log("here")
-            return res.json({ msg: "Please check your Password" }).status(StatusCodes.UNAUTHORIZED);
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please check your Password" }).status(StatusCodes.UNAUTHORIZED);
         }
 
         let userToSend = {
@@ -81,9 +81,9 @@ const login = async (req, res) => {
             email: existingUser.email,
         };
         console.log(userToSend)
-        const token = jwt.sign(userToSend, secretKey, { expiresIn: '24h' });
+        const token = jwt.sign(userToSend, secretKey, { expiresIn: '48h' });
         
-        res.json({ msg: "Welcome", token: token });
+        res.status(StatusCodes.OK).json({ message: "Welcome", token: token });
 }
 
 module.exports = {
