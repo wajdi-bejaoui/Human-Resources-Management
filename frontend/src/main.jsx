@@ -9,12 +9,12 @@ import { MaterialTailwindControllerProvider } from "./context";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <BrowserRouter> */}
+    <BrowserRouter>
       <ThemeProvider>
         <MaterialTailwindControllerProvider>
           <App />
         </MaterialTailwindControllerProvider>
       </ThemeProvider>
-    {/* </BrowserRouter> */}
+    </BrowserRouter>
   </StrictMode>,
 )

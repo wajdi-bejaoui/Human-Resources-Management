@@ -42,7 +42,7 @@ import {
       <div className="mt-8 mb-8 flex flex-col gap-12">
         <Card>
           <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
-            <Typography variant="h6" color="white">
+            <Typography variant="h5" color="white">
               Employees Table
             </Typography>
           </CardHeader>
@@ -57,7 +57,7 @@ import {
                     >
                       <Typography
                         variant="small"
-                        className="text-[11px] font-bold uppercase text-blue-gray-400"
+                        className="text-[13px] font-bold uppercase text-blue-gray-400"
                       >
                         {el}
                       </Typography>
@@ -78,23 +78,22 @@ import {
                       <tr key={id}>
                         <td className={className}>
                           <div className="flex items-center gap-4">
-                            <Avatar src={"/img/team-2.jpeg"} alt={fullname} size="sm" variant="rounded" />
+                            <Avatar src={"/img/team-2.jpeg"} alt={fullname} size="md" variant="rounded" />
                             <div>
                               <Typography
-                                variant="small"
                                 color="blue-gray"
-                                className="font-semibold"
+                                className="text-lg font-bold"
                               >
                                 {fullname}
                               </Typography>
-                              <Typography className="text-xs font-normal text-blue-gray-500">
+                              <Typography className="text-lg font-normal text-blue-gray-500">
                                 {email}
                               </Typography>
                             </div>
                           </div>
                         </td>
                         <td className={className}>
-                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                          <Typography className="text-lg font-semibold text-blue-gray-600">
                             {role}
                           </Typography>
                           {/* <Typography className="text-xs font-normal text-blue-gray-500">
@@ -116,7 +115,7 @@ import {
                           />
                         </td>
                         <td className={className}>
-                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                          <Typography className="text-lg font-semibold text-blue-gray-600">
                             {/* {date} */}19/19/2024
                           </Typography>
                         </td>
@@ -124,14 +123,14 @@ import {
                           <Typography
                             as="a"
                             href="#"
-                            className="text-xs font-semibold text-blue-gray-600 mb-3"
+                            className="text-lg font-semibold text-blue-gray-600 mb-3"
                           >
                             Edit
                           </Typography>
                           <Typography
                             as="a"
                             href="#"
-                            className="text-xs font-semibold text-blue-gray-600"
+                            className="text-lg font-semibold text-blue-gray-600"
                           >
                             Delete
                           </Typography>

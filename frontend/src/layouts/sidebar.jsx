@@ -1,11 +1,11 @@
 import React from 'react'
+import { Link, useNavigate } from "react-router-dom";
 
 function sidebar() {
   return (
-    <><div class="font-poppins antialiased">
+    <><div class="font-poppins antialiased ">
     <div
       id="view"
-      
       x-data="{ sidenav: true }"
     >
       <button
@@ -27,18 +27,19 @@ function sidebar() {
       </button>
       <div
         id="sidebar"
-        class="bg-white h-screen md:block shadow-xl px-3 w-30 md:w-80 lg:w-80 overflow-x-hidden transition-transform duration-300 ease-in-out"
+        class="bg-white h-screen md:block px-3 w-30 md:w-80 lg:w-80 overflow-x-hidden transition-transform duration-300 ease-in-out"
         x-show="sidenav"
         // @click.away="sidenav = false"
       >
-        <div class="space-y-6 md:space-y-10 mt-20">
+        <div class="space-y-6 md:space-y-10 mt-20 ">
           <div id="menu" class="flex flex-col space-y-2">
           <h1 class=" font-bold text-2xl text-center mb-10">
             Navigation
           </h1>
-            <a
+            <Link
+              to=""
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -51,10 +52,10 @@ function sidebar() {
                 ></path>
               </svg>
               <span class="">Dashboard</span>
-            </a>
+            </Link>
             <a
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -70,7 +71,7 @@ function sidebar() {
             </a>
             <a
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -89,7 +90,7 @@ function sidebar() {
             </a>
             {/* <a
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -108,7 +109,7 @@ function sidebar() {
             </a> */}
             <a
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -126,7 +127,7 @@ function sidebar() {
             </a>
             {/* <a
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -144,7 +145,7 @@ function sidebar() {
             </a> */}
             <a
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -158,9 +159,10 @@ function sidebar() {
               </svg>
               <span class="">Évaluations</span>
             </a>
-            <a
+            <Link
+              to="/employees"
               href=""
-              class="text-lg font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+              class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
                 class="w-6 h-6 fill-current inline-block mr-3"
@@ -173,7 +175,7 @@ function sidebar() {
                 ></path>
               </svg>
               <span class="">Employees</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
