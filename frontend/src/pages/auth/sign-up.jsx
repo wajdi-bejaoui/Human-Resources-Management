@@ -33,7 +33,7 @@ export function SignUp() {
       setError()
 
       setIsLoading(false)
-      navigate('/sign-in');
+      navigate('/login');
 
     } catch (err) {
       console.log(err)
@@ -153,7 +153,7 @@ export function SignUp() {
           </div>
           <Typography variant="paragraph" className="text-center text-blue-gray-500 font-medium mt-4">
             Already have an account?
-            <Link to="/sign-in" className="text-gray-900 ml-1">Sign in</Link>
+            <Link to="/login" className="text-gray-900 ml-1">Sign in</Link>
           </Typography>
         </form>
 

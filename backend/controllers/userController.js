@@ -33,6 +33,22 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+exports.getUsersByRole = async (req, res) => {
+  try {
+    console.log("here", req.params.role)
+    const role = req.params.role;
+    const users = await User.findAll({ where: { role } });
+
+    if (users.length === 0) {
+      return res.status(404).send({ message: 'No users found with the specified role' });
+    }
+    res.status(200).send(users);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+
 exports.updateUser = async (req, res) => {
   try {
     const id = req.params.id;

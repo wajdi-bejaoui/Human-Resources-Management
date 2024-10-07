@@ -3,6 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const sequelize = require('./config/db');
+const passport = require('passport');
+require('./config/passport')(passport); // Import Passport configuration
+
 
 const app = express();
 const port = 3000;
@@ -11,13 +14,20 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(cors());
 
+// Initialize Passport middleware
+app.use(passport.initialize());
+
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const congeeRoutes = require('./routes/congeeRoutes');
+
 
 
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/congees', congeeRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

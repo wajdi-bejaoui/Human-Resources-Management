@@ -7,10 +7,16 @@ const {
   updateUser,
   deleteUser,
   getUserById,
+  getUsersByRole,
+
 } = require('../controllers/userController');
 
 
 router.route('/').post( createUser).get(getUsers);
+
+router
+  .route('/:role')
+  .get(getUsersByRole);
 
 router
   .route('/:id')

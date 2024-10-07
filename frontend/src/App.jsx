@@ -5,6 +5,7 @@ import SignIn from './pages/auth/sign-in'
 import SignUp from './pages/auth/sign-up';
 import Home from './pages/dashboard/home';
 import Routes from './routes';
+import Dashboard from './layouts/EmployeesDashboard';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
     // <SignUp />
     // <Home/>
     <Routes/>
+    // <EmployeesDashboard/>
   );
 }
 
