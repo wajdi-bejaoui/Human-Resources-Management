@@ -24,6 +24,10 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  imageUrl: {  // Adding a new field for image URL or path
+    type: DataTypes.STRING,
+    allowNull: true  // This allows the field to be optional
   }
 }, {
   timestamps: false,

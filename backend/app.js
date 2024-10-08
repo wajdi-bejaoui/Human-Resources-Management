@@ -17,9 +17,12 @@ app.use(cors());
 // Initialize Passport middleware
 app.use(passport.initialize());
 
+app.use('/uploads', express.static('uploads'));
+
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const congeeRoutes = require('./routes/congeeRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
 
 
 
@@ -27,6 +30,7 @@ const congeeRoutes = require('./routes/congeeRoutes');
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/congees', congeeRoutes);
+app.use('/api/employees', employeeRoutes);
 
 
 app.get('/', (req, res) => {

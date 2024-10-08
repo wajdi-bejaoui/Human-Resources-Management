@@ -7,10 +7,16 @@ import {
     Chip,
     Tooltip,
     Progress,
+    // Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Button
   } from "@material-tailwind/react";
   import { employeesTableData, projectsTableData } from "../../data";
   import React, { useEffect, useState } from 'react';
   import axios from 'axios';
+  import Dialog from './dialog'
   
 
 
@@ -19,6 +25,10 @@ import {
     const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [open, setOpen] = React.useState(false);
+ 
+  const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -38,6 +48,9 @@ import {
 
     fetchEmployees();
   }, []);
+
+
+
     return (
       <div className="mt-8 mb-8 flex flex-col gap-12">
         <Card>
@@ -67,7 +80,7 @@ import {
               </thead>
               <tbody>
                 {employees.map(
-                  ({ id, fullname, email, role, online, date }, key) => {
+                  ({ id, imageUrl, fullname, email, role, online, date }, key) => {
                     const className = `py-3 px-5 ${
                       key === employees.length - 1
                         ? ""
@@ -78,7 +91,9 @@ import {
                       <tr key={id}>
                         <td className={className}>
                           <div className="flex items-center gap-4">
-                            <Avatar src={"/img/team-2.jpeg"} alt={fullname} size="md" variant="rounded" />
+                          
+                            {imageUrl && <Avatar src={`http://localhost:3000${imageUrl}`} alt={fullname} size="md" variant="rounded" />}
+                            {!imageUrl && <Avatar src={"/img/team-2.jpeg"} alt={fullname} size="md" variant="rounded" />}
                             <div>
                               <Typography
                                 color="blue-gray"
@@ -123,17 +138,21 @@ import {
                           <Typography
                             as="a"
                             href="#"
-                            className="text-lg font-semibold text-blue-gray-600 mb-3"
+                            className="text-lg font-semibold text-blue-gray-600 mb-3 hover:text-green-600"
                           >
                             Edit
                           </Typography>
                           <Typography
                             as="a"
                             href="#"
-                            className="text-lg font-semibold text-blue-gray-600"
+                            className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
+                            onClick={handleOpen}
                           >
                             Delete
                           </Typography>
+                          
+                          <Dialog open={open} handleOpen={handleOpen}></Dialog>
+                          
                         </td>
                       </tr>
                     );

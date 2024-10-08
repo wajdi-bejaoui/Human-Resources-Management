@@ -18,8 +18,7 @@ app.use(
 );// Middleware to check and validate JWT
 
  const register =  async (req, res) => {
-     console.log("here sign up");
-     console.log("tt", req.body);
+    
      try {
          // Check if the email already exists in the database
          const existingUser = await User.findOne({
@@ -52,7 +51,6 @@ app.use(
 
 const login = async (req, res) => {
     let user = req.body;
-    console.log(req.body);
 
 
     // Check if the email exists
@@ -63,24 +61,21 @@ const login = async (req, res) => {
         if (!existingUser) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please check your Email" });
         }
-        console.log(existingUser)
         // Compare passwords
         const isMatch = await bcrypt.compare(req.body.password, existingUser.password);
         console.log('Password Match:', isMatch);  // Log the result of password comparison
 
         // Passwords do not match
         if (!isMatch) {
-            console.log("here")
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please check your Password" }).status(StatusCodes.UNAUTHORIZED);
         }
 
         let userToSend = {
             fullname: existingUser.fullname,
-            id: existingUser._id,
+            id: existingUser.id,
             role: existingUser.role,
             email: existingUser.email,
         };
-        console.log(userToSend)
         const token = jwt.sign(userToSend, secretKey, { expiresIn: '48h' });
         
         res.status(StatusCodes.OK).json({ message: "Welcome", token: token });

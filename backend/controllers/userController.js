@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const { StatusCodes } = require('http-status-codes');
+
 
 exports.createUser = async (req, res) => {
   try {
@@ -18,6 +20,7 @@ exports.getUsers = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
 
 exports.getUserById = async (req, res) => {
   try {
@@ -40,7 +43,7 @@ exports.getUsersByRole = async (req, res) => {
     const users = await User.findAll({ where: { role } });
 
     if (users.length === 0) {
-      return res.status(404).send({ message: 'No users found with the specified role' });
+      return res.status(200).send({ users : [], message: 'No users found with the specified role' });
     }
     res.status(200).send(users);
   } catch (err) {

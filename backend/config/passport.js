@@ -13,14 +13,18 @@ module.exports = (passport) => {
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
       try {
+        console.log(jwt_payload)
         // Here you could fetch the user from the database using the payload's ID
-        const user = await User.findById(jwt_payload.id);
+        const user = await User.findByPk(jwt_payload.id);
         
         // If user exists, pass it to Passport
         if (user) {
+          console.log(user)
           return done(null, user);
         }
-        
+
+        console.log("dont exist")
+
         // If user doesn't exist, return false
         return done(null, false);
       } catch (error) {
