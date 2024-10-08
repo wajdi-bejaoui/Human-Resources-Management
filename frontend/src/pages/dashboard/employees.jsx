@@ -17,6 +17,8 @@ import {
   import React, { useEffect, useState } from 'react';
   import axios from 'axios';
   import Dialog from './dialog'
+  import { Link, useNavigate } from "react-router-dom";
+
   
 
 
@@ -136,8 +138,8 @@ import {
                         </td>
                         <td className={className}>
                           <Typography
-                            as="a"
-                            href="#"
+                            as={Link}
+                            to={`/edit-employee/${id}`}
                             className="text-lg font-semibold text-blue-gray-600 mb-3 hover:text-green-600"
                           >
                             Edit

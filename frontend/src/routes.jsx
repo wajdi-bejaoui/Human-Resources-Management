@@ -8,6 +8,7 @@ import AddEmployeeForm from './pages/dashboard/add-employee-form';
 
 import Home from './pages/dashboard/home';
 import { Layout } from './layouts/layout';
+import EditEmployeeForm from './pages/dashboard/edit-employee-form';
 
 
 
@@ -21,6 +22,7 @@ function routes() {
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/add-employee" element={<AddEmployeeForm />} />
+        <Route path="/edit-employee/:id" element={<EditEmployeeForm />} />
         <Route path="/" element={<Home />} />
         {/* <Route path="/contact" element={<Contact />} /> */}
       </Routes>

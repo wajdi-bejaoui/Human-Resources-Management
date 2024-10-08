@@ -13,13 +13,17 @@ module.exports = (passport) => {
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
       try {
-        console.log(jwt_payload)
+        // console.log(jwt_payload)
         // Here you could fetch the user from the database using the payload's ID
         const user = await User.findByPk(jwt_payload.id);
+
+        if (user.role !== 'rh') {
+          return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized' });
+        }
         
         // If user exists, pass it to Passport
         if (user) {
-          console.log(user)
+          // console.log(user)
           return done(null, user);
         }
 
