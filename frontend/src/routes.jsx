@@ -9,6 +9,7 @@ import AddEmployeeForm from './pages/dashboard/add-employee-form';
 import Home from './pages/dashboard/home';
 import { Layout } from './layouts/layout';
 import EditEmployeeForm from './pages/dashboard/edit-employee-form';
+import { Congees } from './pages/dashboard/congees';
 
 
 
@@ -18,11 +19,14 @@ function routes() {
     // <Router>
     <Layout>
       <Routes>
-        <Route path="/employees" element={<Employees />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<SignUp />} />
+        <Route path="/employees" element={<Employees />} />
         <Route path="/add-employee" element={<AddEmployeeForm />} />
         <Route path="/edit-employee/:id" element={<EditEmployeeForm />} />
+        <Route path="/congees" element={<Congees />} />
+        {/* <Route path="/add-congee" element={<Add />} />
+        <Route path="/edit-congee/:id" element={<EditEmployeeForm />} /> */}
         <Route path="/" element={<Home />} />
         {/* <Route path="/contact" element={<Contact />} /> */}
       </Routes>

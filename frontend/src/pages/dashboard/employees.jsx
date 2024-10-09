@@ -34,7 +34,7 @@ import {
         console.log("fetching...")
 
         console.log(response.data)
-        setEmployees(response.data);
+        setEmployees(response.data.users);
       } catch (err) {
         setError(err.message);
       } finally {

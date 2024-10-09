@@ -30,7 +30,9 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true  // This allows the field to be optional
   }
-}, {
+},
+{
+   tableName: 'users', // Explicitly define the table name
   timestamps: false,
   hooks: {
     // Before saving (create or update), hash the password if it's changed

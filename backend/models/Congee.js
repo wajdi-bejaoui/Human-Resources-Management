@@ -34,9 +34,9 @@ const Congee = sequelize.define('Congee', {
       key: 'id'
     }
   }
-}, {
+},{
+  tableName: 'congees', // Explicitly define the table name
   timestamps: false,
-  
 });
 
 

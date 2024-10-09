@@ -64,8 +64,8 @@ function sidebar() {
               </svg>
               <span class="">Dashboard</span>
             </Link>
-            <a
-              href=""
+            <Link
+              to="congees"
               class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -79,7 +79,7 @@ function sidebar() {
                 ></path>
               </svg>
               <span class="">Congee</span>
-            </a>
+            </Link>
             <a
               href=""
               class="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"

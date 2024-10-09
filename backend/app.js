@@ -21,25 +21,46 @@ app.use(passport.initialize());
 
 app.use('/uploads', express.static('uploads'));
 
+// Define associations
+const defineAssociations = () => {
+  // Congee belongs to a User
+  Congee.belongsTo(User, {
+    foreignKey: 'userId', // Foreign key in the Congee table
+    targetKey: 'id',      // Primary key in the User table
+  });
 
-
-// Sync models in the correct order
-const syncDatabase = async () => {
-  try {
-    // Drop the Congee table first
-    await sequelize.query("DROP TABLE IF EXISTS `congees`");
-    // Then drop the User table
-    await sequelize.query("DROP TABLE IF EXISTS `users`");
-    // First sync User model
-    await User.sync({ force: true }); // Adjust if you want to keep data
-    // Then sync Congee model
-    await Congee.sync({ force: true }); // Adjust if you want to keep data
-    console.log('Database & tables created!');
-  } catch (error) {
-    console.error('Error syncing database:', error);
-  }
+  // User has many Congees
+  User.hasMany(Congee, {
+    foreignKey: 'userId', // Foreign key in the Congee table
+    sourceKey: 'id',      // Primary key in the User table
+  });
 };
-syncDatabase(); // Call the sync function
+
+// Call the function to define associations
+defineAssociations();
+
+sequelize.sync({ alter: true })
+  .then(() => console.log('Database synchronized'))
+  .catch(err => console.log('Error synchronizing the database', err));
+
+// // Sync models in the correct order
+// const syncDatabase = async () => {
+//   try {
+//     // Drop the Congee table first
+//     // await sequelize.query("DROP TABLE IF EXISTS `congees`");
+//     // Then drop the User table
+//     // await sequelize.query("DROP TABLE IF EXISTS `users`");
+//     // First sync User model
+//     await User.sync(); // Adjust if you want to keep data
+//     // Then sync Congee model
+//     await Congee.sync(); // Adjust if you want to keep data
+//     // model.sync({ force: true }): This creates the table by dropping it if the same table exists already.
+//     console.log('Database & tables created!');
+//   } catch (error) {
+//     console.error('Error syncing database:', error);
+//   }
+// };
+// syncDatabase(); // Call the sync function
 
 
 const userRoutes = require('./routes/userRoutes');

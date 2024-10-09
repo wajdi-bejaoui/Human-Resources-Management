@@ -16,7 +16,7 @@ import {
 
 
   
-  export function Congee() {
+  export function Congees() {
     const [congees, setCongees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,45 +27,46 @@ import {
 
 
   useEffect(() => {
-    const fetchCongee = async () => {
+    const fetchCongees = async () => {
       try {
         console.log("fetch")
-        const response = await axios.get('http://localhost:3000/api/users/employee');
+        const response = await axios.get('http://localhost:3000/api/congees');
         console.log("fetching...")
 
         console.log(response.data)
-        setCongee(response.data);
+        setCongees(response.data);
       } catch (err) {
+        setCongees([])
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCongee();
+    fetchCongees();
   }, []);
 
 
-  const deleteEmployee = async (id) => {
+  const deleteCongee = async (id) => {
     try {
       console.log("delete called")
       const token = localStorage.getItem('token'); 
 
-      const response = await axios.delete(`http://localhost:3000/api/congee/${id}`, {
+      const response = await axios.delete(`http://localhost:3000/api/congees/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      // Update congee list after successful deletion
+      // Update congees list after successful deletion
       setCongees((prevCongees) => prevCongees.filter((emp) => emp.id !== id));
 
       console.log(response)
-      // alert('congee deleted successfully');
+      // alert('Congee deleted successfully');
       // handleClose();  // Close the dialog after successful deletion
     } catch (error) {
-      console.error('Error deleting congee:', error);
-      alert('Failed to delete congee');
+      console.error('Error deleting Congee:', error);
+      alert('Failed to delete Congee');
     }
   };
 
@@ -83,7 +84,7 @@ import {
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Employee", "Debut", "Fin", "typeCongee", "nbJour"].map((el) => (
+                  {["Employee", "Begin/End date", "Type congee", "Nb days"].map((el) => (
                     <th
                       key={el}
                       className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -99,8 +100,8 @@ import {
                 </tr>
               </thead>
               <tbody>
-                {congees.map(
-                  ({ id, user, debut, fin, nbJour }, key) => {
+                {congees.length > 0 ? congees.map(
+                  ({ id, user, debut, fin, typeCongee, nbJour }, key) => {
                     const className = `py-3 px-5 ${
                       key === congees.length - 1
                         ? ""
@@ -112,33 +113,27 @@ import {
                         <td className={className}>
                           <div className="flex items-center gap-4">
                           
-                            {imageUrl && <Avatar src={`http://localhost:3000${imageUrl}`} alt={fullname} size="md" variant="rounded" />}
-                            {!imageUrl && <Avatar src={"/img/team-2.jpeg"} alt={fullname} size="md" variant="rounded" />}
+                            {user.imageUrl && <Avatar src={`http://localhost:3000${user.imageUrl}`} alt={user.fullname} size="md" variant="rounded" />}
+                            {!user.imageUrl && <Avatar src={"/img/team-2.jpeg"} alt={user.fullname} size="md" variant="rounded" />}
                             <div>
                               <Typography
                                 color="blue-gray"
                                 className="text-lg font-bold"
                               >
-                                {fullname}
+                                {user.fullname}
                               </Typography>
                               <Typography className="text-lg font-normal text-blue-gray-500">
-                                {email}
+                                {user.email}
                               </Typography>
                             </div>
                           </div>
                         </td>
                         <td className={className}>
                           <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {role}
+                            {debut}
                           </Typography>
-                          {/* <Typography className="text-xs font-normal text-blue-gray-500">
-                            {role}
-                          </Typography> */}
-                        </td>
-                        
-                        <td className={className}>
-                          <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {/* {date} */}19/19/2024
+                          <Typography className="text-lg font-normal text-blue-gray-500">
+                            {fin}
                           </Typography>
                         </td>
                         <td className={className}>
@@ -151,9 +146,14 @@ import {
                           <Chip
                             variant="gradient"
                             color="blue-gray"
-                            value="offline"
+                            value={typeCongee}
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-lg font-semibold text-blue-gray-600">
+                            {nbJour}
+                          </Typography>
                         </td>
                         <td className={className}>
                           <Typography
@@ -172,13 +172,14 @@ import {
                             Delete
                           </Typography>
                           
-                          {/* <Dialog open={open} handleOpen={handleOpen} handleDelete={() => deleteEmployee(id)}></Dialog> */}
                           
                         </td>
                       </tr>
                     );
                   }
-                )}
+                ) : (
+                  <p>There are no congees</p>
+              )}
               </tbody>
             </table>
           </CardBody>
@@ -187,5 +188,5 @@ import {
     );
   }
   
-  export default Employees;
+  export default Congees;
   
