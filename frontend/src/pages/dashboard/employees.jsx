@@ -5,15 +5,8 @@ import {
     Typography,
     Avatar,
     Chip,
-    Tooltip,
-    Progress,
-    // Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-  Button
+
   } from "@material-tailwind/react";
-  import { employeesTableData, projectsTableData } from "../../data";
   import React, { useEffect, useState } from 'react';
   import axios from 'axios';
   import Dialog from './dialog'
@@ -28,9 +21,10 @@ import {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = useState(false);
  
-  const handleOpen = () => setOpen(!open);
+  // const handleOpen = () => setOpen(!open);
+
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -50,6 +44,30 @@ import {
 
     fetchEmployees();
   }, []);
+
+
+  const deleteEmployee = async (id) => {
+    try {
+      console.log("delete called")
+      const token = localStorage.getItem('token'); 
+
+      const response = await axios.delete(`http://localhost:3000/api/employees/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      // Update employees list after successful deletion
+      setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
+
+      console.log(response)
+      // alert('Employee deleted successfully');
+      // handleClose();  // Close the dialog after successful deletion
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      alert('Failed to delete employee');
+    }
+  };
 
 
 
@@ -148,12 +166,12 @@ import {
                             as="a"
                             href="#"
                             className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
-                            onClick={handleOpen}
+                            onClick={() => deleteEmployee(id)}
                           >
                             Delete
                           </Typography>
                           
-                          <Dialog open={open} handleOpen={handleOpen}></Dialog>
+                          {/* <Dialog open={open} handleOpen={handleOpen} handleDelete={() => deleteEmployee(id)}></Dialog> */}
                           
                         </td>
                       </tr>
