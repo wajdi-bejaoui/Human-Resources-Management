@@ -46,6 +46,8 @@ const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const congeeRoutes = require('./routes/congeeRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
+const horaireRoutes = require('./routes/HoraireRoutes');  // Import horaire routes
+const evaluationRoutes = require('./routes/EvaluationRoutes');  // Import horaire routes
 
 
 
@@ -54,6 +56,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/congees', congeeRoutes);
 app.use('/api/employees', employeeRoutes);
+app.use('/api/evaluations', evaluationRoutes);
+app.use('/api/horaire', horaireRoutes);
 
 
 app.get('/', (req, res) => {

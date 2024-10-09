@@ -8,7 +8,7 @@ exports.addEmployee = async (req, res) => {
     const user = req.user;  // The authenticated user from the middleware
 
     // Ensure only "rh" role can add an employee
-    if (user.role !== 'rh') {
+    if (user.role !== 'RH') {
       return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized' });
     }
 
