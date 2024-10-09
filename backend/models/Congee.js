@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const User = require('../models/User');
+
 
 
 const Congee = sequelize.define('Congee', {
@@ -23,6 +25,14 @@ const Congee = sequelize.define('Congee', {
   nbJour: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  userId: { // Add userId field
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User, // This should match the name of the User table
+      key: 'id'
+    }
   }
 }, {
   timestamps: false,

@@ -99,7 +99,7 @@ import {
                 </tr>
               </thead>
               <tbody>
-                {employees.map(
+                {employees.length > 0 ? employees.map(
                   ({ id, imageUrl, fullname, email, role, online, date }, key) => {
                     const className = `py-3 px-5 ${
                       key === employees.length - 1
@@ -177,7 +177,9 @@ import {
                       </tr>
                     );
                   }
-                )}
+                ) : (
+                  <p>There are no employees</p>
+              )}
               </tbody>
             </table>
           </CardBody>

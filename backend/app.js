@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const sequelize = require('./config/db');
 const passport = require('passport');
+const User = require('./models/User');
+const Congee = require('./models/Congee');
 require('./config/passport')(passport); // Import Passport configuration
 
 
@@ -18,6 +20,27 @@ app.use(cors());
 app.use(passport.initialize());
 
 app.use('/uploads', express.static('uploads'));
+
+
+
+// Sync models in the correct order
+const syncDatabase = async () => {
+  try {
+    // Drop the Congee table first
+    await sequelize.query("DROP TABLE IF EXISTS `congees`");
+    // Then drop the User table
+    await sequelize.query("DROP TABLE IF EXISTS `users`");
+    // First sync User model
+    await User.sync({ force: true }); // Adjust if you want to keep data
+    // Then sync Congee model
+    await Congee.sync({ force: true }); // Adjust if you want to keep data
+    console.log('Database & tables created!');
+  } catch (error) {
+    console.error('Error syncing database:', error);
+  }
+};
+syncDatabase(); // Call the sync function
+
 
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');

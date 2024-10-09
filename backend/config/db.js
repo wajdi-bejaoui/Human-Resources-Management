@@ -5,4 +5,6 @@ const sequelize = new Sequelize('Human-Resources-Management-DB', 'root', '', {
   dialect: 'mysql'
 });
 
+
+
 module.exports = sequelize;

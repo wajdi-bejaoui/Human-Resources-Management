@@ -45,7 +45,7 @@ exports.getUsersByRole = async (req, res) => {
     if (users.length === 0) {
       return res.status(200).send({ users : [], message: 'No users found with the specified role' });
     }
-    res.status(200).send(users);
+    res.status(200).send({users});
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

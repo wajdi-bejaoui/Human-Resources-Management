@@ -12,8 +12,27 @@ exports.createCongee = async (req, res) => {
 
 exports.getCongees = async (req, res) => {
   try {
-    const congees = await Congee.findAll();
-    res.status(200).send(congees);
+    const congees = await Congee.findAll({
+      include: [{
+        model: User,
+        attributes: ['fullname', 'email'], // Include only the fields you need
+      }]
+    });
+    
+    // Format the response to include user info with each congee
+    const response = congees.map(congee => ({
+      id: congee.id,
+      debut: congee.debut,
+      fin: congee.fin,
+      typeCongee: congee.typeCongee,
+      nbJour: congee.nbJour,
+      user: {
+        fullname: congee.User.fullname, // Assuming your user model has a fullname
+        email: congee.User.email,
+      }
+    }));
+
+    res.status(200).send(response);
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
