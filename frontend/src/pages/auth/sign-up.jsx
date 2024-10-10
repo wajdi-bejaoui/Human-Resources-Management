@@ -8,6 +8,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 import axios from 'axios';
+import { register } from "../../api/authApi";
 
 
 
@@ -26,7 +27,7 @@ export function SignUp() {
     try {
       setIsLoading(true)
       console.log({ fullname, email, password });
-      const response = await axios.post('http://localhost:3000/api/auth/register', { fullname, email, password });
+      const response = await register({ fullname, email, password });
       console.log('Register success.')
 
       console.log(response.data);  // handle success

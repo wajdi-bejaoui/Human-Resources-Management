@@ -12,6 +12,33 @@ exports.createCongee = async (req, res) => {
   }
 };
 
+exports.addMyCongee = async (req, res) => {
+  try {
+
+    const user = req.user;
+    const congeeData = req.body;
+    congeeData.userId = user.id;
+    const congee = await Congee.create(congeeData);
+    res.status(201).send({ message: 'Congee added...', congee });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.getMyCongees = async (req, res) => {
+  try {
+    const userId = req.user.id; // Get the logged-in user's ID
+    const congees = await Congee.findAll({ where: { userId } }); // Find congees that belong to the user
+    if (!congees) {
+      res.status(404).send({ message: 'Congee not found' });
+    } else {
+      res.status(200).send(congees);
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 exports.getCongees = async (req, res) => {
   try {
     // First, create a test user
@@ -93,6 +120,22 @@ exports.updateCongee = async (req, res) => {
 };
 
 exports.deleteCongee = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleted = await Congee.destroy({
+      where: { id: id }
+    });
+    if (deleted) {
+      res.status(200).send({ message: 'Congee deleted...' });
+    } else {
+      res.status(404).send({ message: 'Congee not found' });
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.deleteMyCongee = async (req, res) => {
   try {
     const id = req.params.id;
     const deleted = await Congee.destroy({

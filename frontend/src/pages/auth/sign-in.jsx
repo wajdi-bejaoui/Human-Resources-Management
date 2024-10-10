@@ -9,6 +9,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../api/authApi";
 
 export function SignIn() {
   const [email, setEmail] = useState()
@@ -24,9 +25,9 @@ export function SignIn() {
     try {
       setIsLoading(true)
       console.log({ email, password });
-      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
-      console.log(response.data);  // handle success
-      const { token } = response.data;
+      const response = await login({ email, password });
+      console.log(response);  // handle success
+      const { token } = response;
       localStorage.setItem('token', token);
       setError()
 

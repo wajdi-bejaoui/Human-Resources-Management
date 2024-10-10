@@ -11,6 +11,7 @@ import {
   import axios from 'axios';
   import Dialog from './dialog'
   import { Link, useNavigate } from "react-router-dom";
+import { getCongees } from "../../api/congeeApi";
 
   
 
@@ -29,12 +30,10 @@ import {
   useEffect(() => {
     const fetchCongees = async () => {
       try {
-        console.log("fetch")
-        const response = await axios.get('http://localhost:3000/api/congees');
-        console.log("fetching...")
+        const response = await getCongees();
 
-        console.log(response.data)
-        setCongees(response.data);
+        console.log(response)
+        setCongees(response);
       } catch (err) {
         setCongees([])
         setError(err.message);
@@ -163,14 +162,14 @@ import {
                           >
                             Edit
                           </Typography>
-                          <Typography
+                          {/* <Typography
                             as="a"
                             href="#"
                             className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
                             onClick={() => deleteCongee(id)}
                           >
                             Delete
-                          </Typography>
+                          </Typography> */}
                           
                           
                         </td>

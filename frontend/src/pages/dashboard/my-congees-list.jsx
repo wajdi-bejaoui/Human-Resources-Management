@@ -11,14 +11,14 @@ import {
   import axios from 'axios';
   import Dialog from './dialog'
   import { Link, useNavigate } from "react-router-dom";
-import { getEmployees } from "../../api/employeeApi";
+import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
 
   
 
 
   
-  export function Employees() {
-    const [employees, setEmployees] = useState([]);
+  export function MyCongeesList() {
+    const [congees, setCongees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,46 +28,49 @@ import { getEmployees } from "../../api/employeeApi";
 
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchCongees = async () => {
       try {
-        setLoading(true);
-
-        const response = await getEmployees();
+        const token = localStorage.getItem('token'); 
+        const response = await getMyCongees({
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
 
         console.log(response)
-        setEmployees(response.users);
+        setCongees(response);
       } catch (err) {
-        setEmployees([])
+        setCongees([])
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEmployees();
+    fetchCongees();
   }, []);
 
 
-  const deleteEmployee = async (id) => {
+  const deleteCongee = async (id) => {
     try {
       console.log("delete called")
       const token = localStorage.getItem('token'); 
 
-      const response = await axios.delete(`http://localhost:3000/api/employees/${id}`, {
+      const response = await deleteMyCongees(id, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      // Update employees list after successful deletion
-      setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
+      // Update congees list after successful deletion
+      setCongees((prevCongees) => prevCongees.filter((emp) => emp.id !== id));
 
       console.log(response)
-      // alert('Employee deleted successfully');
+      // alert('Congee deleted successfully');
       // handleClose();  // Close the dialog after successful deletion
     } catch (error) {
-      console.error('Error deleting employee:', error);
-      alert('Failed to delete employee');
+      console.error('Error deleting Congee:', error);
+      alert('Failed to delete Congee');
     }
   };
 
@@ -78,14 +81,14 @@ import { getEmployees } from "../../api/employeeApi";
         <Card>
           <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
             <Typography variant="h5" color="white">
-              Employees Table
+              Congees Table
             </Typography>
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Employee", "function", "status", "employed", ""].map((el) => (
+                  {["Begin/End date", "Type congee", "Nb days"].map((el) => (
                     <th
                       key={el}
                       className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -101,41 +104,24 @@ import { getEmployees } from "../../api/employeeApi";
                 </tr>
               </thead>
               <tbody>
-                {employees.length > 0 ? employees.map(
-                  ({ id, imageUrl, fullname, email, role, online, date }, key) => {
+                {congees.length > 0 ? congees.map(
+                  ({ id, debut, fin, typeCongee, nbJour }, key) => {
                     const className = `py-3 px-5 ${
-                      key === employees.length - 1
+                      key === congees.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
                     }`;
   
                     return (
                       <tr key={id}>
-                        <td className={className}>
-                          <div className="flex items-center gap-4">
-                          
-                            {imageUrl && <Avatar src={`http://localhost:3000${imageUrl}`} alt={fullname} size="md" variant="rounded" />}
-                            {!imageUrl && <Avatar src={"/img/team-2.jpeg"} alt={fullname} size="md" variant="rounded" />}
-                            <div>
-                              <Typography
-                                color="blue-gray"
-                                className="text-lg font-bold"
-                              >
-                                {fullname}
-                              </Typography>
-                              <Typography className="text-lg font-normal text-blue-gray-500">
-                                {email}
-                              </Typography>
-                            </div>
-                          </div>
-                        </td>
+                        
                         <td className={className}>
                           <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {role}
+                            {debut}
                           </Typography>
-                          {/* <Typography className="text-xs font-normal text-blue-gray-500">
-                            {role}
-                          </Typography> */}
+                          <Typography className="text-lg font-normal text-blue-gray-500">
+                            {fin}
+                          </Typography>
                         </td>
                         <td className={className}>
                           {/* <Chip
@@ -147,40 +133,42 @@ import { getEmployees } from "../../api/employeeApi";
                           <Chip
                             variant="gradient"
                             color="blue-gray"
-                            value="offline"
+                            value={typeCongee}
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />
                         </td>
                         <td className={className}>
                           <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {/* {date} */}19/19/2024
+                            {nbJour}
                           </Typography>
                         </td>
                         <td className={className}>
                           <Typography
                             as={Link}
-                            to={`/edit-employee/${id}`}
+                            to={`/edit-congee/${id}`}
                             className="text-lg font-semibold text-blue-gray-600 mb-3 hover:text-green-600"
                           >
                             Edit
                           </Typography>
-                          <Typography
+                          
+                          
+                          
+                        </td>
+                        <td className={className}>
+                        <Typography
                             as="a"
                             href="#"
                             className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
-                            onClick={() => deleteEmployee(id)}
+                            onClick={() => deleteCongee(id)}
                           >
                             Delete
                           </Typography>
-                          
-                          {/* <Dialog open={open} handleOpen={handleOpen} handleDelete={() => deleteEmployee(id)}></Dialog> */}
-                          
                         </td>
                       </tr>
                     );
                   }
                 ) : (
-                  <p>There are no employees</p>
+                  <p>There are no congees</p>
               )}
               </tbody>
             </table>
@@ -190,5 +178,5 @@ import { getEmployees } from "../../api/employeeApi";
     );
   }
   
-  export default Employees;
+  export default MyCongeesList;
   
