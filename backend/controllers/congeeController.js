@@ -18,6 +18,7 @@ exports.addMyCongee = async (req, res) => {
     const user = req.user;
     const congeeData = req.body;
     congeeData.userId = user.id;
+    congeeData.status = "pending";
     const congee = await Congee.create(congeeData);
     res.status(201).send({ message: 'Congee added...', congee });
   } catch (err) {
@@ -62,11 +63,10 @@ exports.getCongees = async (req, res) => {
         model: User,
         attributes: ['fullname', 'email'], // Include only the fields you need
         // required: true, // Ensures only congees with associated users are returned
-
       }]
     });
 
-    console.log(JSON.stringify(congees, null, 2)); // Check if User data is included
+    // console.log(JSON.stringify(congees, null, 2)); // Check if User data is included
 
     
     // Format the response to include user info with each congee
@@ -76,6 +76,8 @@ exports.getCongees = async (req, res) => {
       fin: congee.fin,
       typeCongee: congee.typeCongee,
       nbJour: congee.nbJour,
+      file: congee.file,
+      status: congee.status,
       user: {
         fullname: congee.User.fullname, // Assuming your user model has a fullname
         email: congee.User.email,
@@ -96,6 +98,44 @@ exports.getCongeeById = async (req, res) => {
       res.status(404).send({ message: 'Congee not found' });
     } else {
       res.status(200).send(congee);
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.acceptCongee = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const congee = {status : "approved"};
+
+    const [updated] = await Congee.update(congee, {
+      where: { id: id }
+    });
+    if (updated) {
+      const updatedCongee = await Congee.findByPk(id);
+      res.status(200).send({ message: 'Congee approved...', congee: updatedCongee });
+    } else {
+      res.status(404).send({ message: 'Congee not found' });
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.refuseCongee = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const congee = {status : "refused"};
+
+    const [updated] = await Congee.update(congee, {
+      where: { id: id }
+    });
+    if (updated) {
+      const updatedCongee = await Congee.findByPk(id);
+      res.status(200).send({ message: 'Congee accepted...', congee: updatedCongee });
+    } else {
+      res.status(404).send({ message: 'Congee not found' });
     }
   } catch (err) {
     res.status(500).send({ message: err.message });

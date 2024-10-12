@@ -11,14 +11,14 @@ import {
   import axios from 'axios';
   import Dialog from './dialog'
   import { Link, useNavigate } from "react-router-dom";
-import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
+import { acceptHoraire, refuseHoraire, getHoraires } from "../../api/horaireApi";
 
   
 
 
   
-  export function Congees() {
-    const [congees, setCongees] = useState([]);
+  export function HoraireList() {
+    const [horaires, setHoraires] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,100 +28,82 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
 
 
   useEffect(() => {
-    const fetchCongees = async () => {
+    const fetchHoraires = async () => {
       try {
-        const response = await getCongees();
+        const token = localStorage.getItem('token'); 
+        const response = await getHoraires({
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
 
         console.log(response)
-        setCongees(response);
+        setHoraires(response);
       } catch (err) {
-        setCongees([])
+        setHoraires([])
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCongees();
+    fetchHoraires();
   }, []);
 
 
-  const congeeRefuse = async (id) => {
+  const horaireRefuse = async (id) => {
     try {
         console.log("accept called")
         const token = localStorage.getItem('token'); 
   
-        const response = await refuseCongee(id, {
+        const response = await refuseHoraire(id, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
   
-        // Update congees list after successful update
-        setCongees((prevCongees) =>
-            prevCongees.map((congee) =>
-              congee.id === id ? { ...congee, status: "refused" } : congee
+        // Update Horaires list after successful update
+        setHoraires((prevHoraires) =>
+            prevHoraires.map((horaire) =>
+                horaire.id === id ? { ...horaire, status: "refused" } : horaire
             )
           );
   
         console.log(response)
-        // alert('Congee deleted successfully');
+        // alert('Horaire deleted successfully');
         // handleClose();  // Close the dialog after successful deletion
       } catch (error) {
-        console.error('Error refusing Congee:', error);
-        alert('Failed to refuse Congee');
+        console.error('Error refusing Horaire:', error);
+        alert('Failed to refuse Horaire');
       }
   }
 
-
-  const congeeAccept = async (id) => {
+  const horaireAccept = async (id) => {
     try {
         console.log("accept called")
         const token = localStorage.getItem('token'); 
   
-        const response = await acceptCongee(id, {
+        const response = await acceptHoraire(id, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
   
-        // Update congees list after successful update
-        setCongees((prevCongees) =>
-            prevCongees.map((congee) =>
-              congee.id === id ? { ...congee, status: "approved" } : congee
+        // Update Horaires list after successful update
+        setHoraires((prevHoraires) =>
+            prevHoraires.map((horaire) =>
+                horaire.id === id ? { ...horaire, status: "confirmed" } : horaire
             )
           );
   
         console.log(response)
-        // alert('Congee deleted successfully');
+        // alert('Horaire deleted successfully');
         // handleClose();  // Close the dialog after successful deletion
       } catch (error) {
-        console.error('Error accepting Congee:', error);
-        alert('Failed to accept Congee');
+        console.error('Error accepting Horaire:', error);
+        alert('Failed to accept Horaire');
       }
   }
-  const deleteCongee = async (id) => {
-    try {
-      console.log("delete called")
-      const token = localStorage.getItem('token'); 
-
-      const response = await axios.delete(`http://localhost:3000/api/congees/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      // Update congees list after successful deletion
-      setCongees((prevCongees) => prevCongees.filter((emp) => emp.id !== id));
-
-      console.log(response)
-      // alert('Congee deleted successfully');
-      // handleClose();  // Close the dialog after successful deletion
-    } catch (error) {
-      console.error('Error deleting Congee:', error);
-      alert('Failed to delete Congee');
-    }
-  };
 
 
 
@@ -130,14 +112,14 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
         <Card>
           <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
             <Typography variant="h5" color="white">
-              Congees Table
+              Horaires Table
             </Typography>
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Employee", "Begin/End date", "Type congee", "Nb days", "status"].map((el) => (
+                  {["Employee", "Date", "Start/End Time", "Status"].map((el) => (
                     <th
                       key={el}
                       className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -153,10 +135,10 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
                 </tr>
               </thead>
               <tbody>
-                {congees.length > 0 ? congees.map(
-                  ({ id, user, debut, fin, typeCongee, nbJour,status }, key) => {
+                {horaires.length > 0 ? horaires.map(
+                  ({ id, User, date, startTime, endTime, status }, key) => {
                     const className = `py-3 px-5 ${
-                      key === congees.length - 1
+                      key === horaires.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
                     }`;
@@ -166,53 +148,41 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
                         <td className={className}>
                           <div className="flex items-center gap-4">
                           
-                            {user.imageUrl && <Avatar src={`http://localhost:3000${user.imageUrl}`} alt={user.fullname} size="md" variant="rounded" />}
-                            {!user.imageUrl && <Avatar src={"/img/team-2.jpeg"} alt={user.fullname} size="md" variant="rounded" />}
+                            {/* {user.imageUrl && <Avatar src={`http://localhost:3000${user.imageUrl}`} alt={user.fullname} size="md" variant="rounded" />} */}
+                            {/* {!user.imageUrl && <Avatar src={"/img/team-2.jpeg"} alt={user.fullname} size="md" variant="rounded" />} */}
                             <div>
                               <Typography
                                 color="blue-gray"
                                 className="text-lg font-bold"
                               >
-                                {user.fullname}
+                                {User.fullname}
                               </Typography>
                               <Typography className="text-lg font-normal text-blue-gray-500">
-                                {user.email}
+                                {User.email}
                               </Typography>
                             </div>
                           </div>
                         </td>
+                        
+                        
                         <td className={className}>
                           <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {debut}
+                            {date}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-lg font-semibold text-blue-gray-600">
+                            {startTime}
                           </Typography>
                           <Typography className="text-lg font-normal text-blue-gray-500">
-                            {fin}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          {/* <Chip
-                            variant="gradient"
-                            color={online ? "green" : "blue-gray"}
-                            value={online ? "online" : "offline"}
-                            className="py-0.5 px-2 text-[11px] font-medium w-fit"
-                          /> */}
-                          <Chip
-                            variant="gradient"
-                            color="blue-gray"
-                            value={typeCongee}
-                            className="py-0.5 px-2 text-[11px] font-medium w-fit"
-                          />
-                        </td>
-                        <td className={className}>
-                          <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {nbJour}
+                            {endTime}
                           </Typography>
                         </td>
                         <td className={className}>
                           <Chip
                             variant="gradient"
-                            color={status === "approved" ? "green" : status === "refused" ? "red" : "orange"}
-                            value={status}
+                            color={status === "confirmed" ? "green" : status === "refused" ? "red" : "orange"}
+                            value={status==0 ? "null" : status}
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />
                           
@@ -220,27 +190,30 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
                         <td className={className}>
                           <Typography
                             as={Link}
-                            onClick={() => congeeAccept(id)}
                             className="text-lg font-semibold text-blue-gray-600 mb-3 hover:text-green-600"
+                            onClick={() => horaireAccept(id)}
+
                           >
-                            Accepter
+                            Confirm
                           </Typography>
-                          <Typography
+                          
+                          
+                          
+                        <Typography
                             as="a"
                             href="#"
                             className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
-                            onClick={() => congeeRefuse(id)}
+                            onClick={() => horaireRefuse(id)}
                           >
-                            Refuser
+                            Refuse
                           </Typography>
-                          
-                          
                         </td>
+                        
                       </tr>
                     );
                   }
                 ) : (
-                  <p>There are no congees</p>
+                  <p>There are no Horaires</p>
               )}
               </tbody>
             </table>
@@ -250,5 +223,5 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
     );
   }
   
-  export default Congees;
+  export default HoraireList;
   

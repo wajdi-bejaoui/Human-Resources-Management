@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const User = require('../models/User');
+
 const Evaluation = sequelize.define('Evaluation', {
   id: {
     type: DataTypes.INTEGER,
@@ -18,7 +20,16 @@ const Evaluation = sequelize.define('Evaluation', {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  userId: { // Add userId field
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User, // This should match the name of the User table
+      key: 'id'
+    }
+  }
 }, {
+  tableName: 'evaluations', // Explicitly define the table name
   timestamps: false,
 });
 

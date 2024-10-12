@@ -13,6 +13,8 @@ const {
   addMyCongee,
   getMyCongees,
   deleteMyCongee,
+  refuseCongee,
+  acceptCongee
 } = require('../controllers/congeeController');
 
 const {
@@ -26,7 +28,8 @@ router.route('/myCongee')
   .post(authenticateUser,fileUpload.single('file'),addMyCongee)
   .get(authenticateUser,getMyCongees)
   
-
+router.route('/refuse/:id').get(authenticateUser,refuseCongee)
+router.route('/accept/:id').get(authenticateUser,acceptCongee)
   
 router.route('/myCongee/:id').delete(authenticateUser,deleteMyCongee)
 

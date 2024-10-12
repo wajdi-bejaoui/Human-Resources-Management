@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const User = require('../models/User');
+
 
 const Horairee = sequelize.define('Horaire', {
   id: {
@@ -23,11 +25,17 @@ const Horairee = sequelize.define('Horaire', {
     type: DataTypes.ENUM('pending', 'confirmed', 'rejected'), // Status of the working time
     defaultValue: 'pending',
   },
-  userId: {
-    type: DataTypes.INTEGER, // Foreign key to the user (employer)
+  userId: { // Add userId field
+    type: DataTypes.INTEGER,
     allowNull: false,
-  },
+    references: {
+      model: User, // This should match the name of the User table
+      key: 'id'
+    }
+  }
 }, {
+  tableName: 'horaires', // Explicitly define the table name
+
   timestamps: false,
 });
 

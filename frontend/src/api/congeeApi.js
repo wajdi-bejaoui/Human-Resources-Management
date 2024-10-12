@@ -41,3 +41,19 @@ export const deleteMyCongees = async (id,headers) => {
     return response.data;
         
 };
+
+export const acceptCongee = async (id,headers) => {
+
+    const response = await axios.get(`${apiUrl}/accept/${id}`, headers);
+
+    return response.data;
+        
+};
+
+export const refuseCongee = async (id,headers) => {
+
+    const response = await axios.get(`${apiUrl}/refuse/${id}`, headers);
+
+    return response.data;
+        
+};

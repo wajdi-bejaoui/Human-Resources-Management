@@ -6,6 +6,10 @@ const sequelize = require('./config/db');
 const passport = require('passport');
 const User = require('./models/User');
 const Congee = require('./models/Congee');
+const Evaluation = require('./models/Evaluation');
+const Horaire = require('./models/Horairee');
+
+
 require('./config/passport')(passport); // Import Passport configuration
 
 
@@ -23,15 +27,39 @@ app.use('/uploads', express.static('uploads'));
 
 // Define associations
 const defineAssociations = () => {
+// Horaire belongs to a User
+Horaire.belongsTo(User, {
+  foreignKey: 'userId', // Foreign key in the Horaire table
+  targetKey: 'id',      // Primary key in the User table
+});
+
   // Congee belongs to a User
   Congee.belongsTo(User, {
     foreignKey: 'userId', // Foreign key in the Congee table
     targetKey: 'id',      // Primary key in the User table
   });
 
+    // Evaluation belongs to a User
+  Evaluation.belongsTo(User, {
+    foreignKey: 'userId', // Foreign key in the Evaluation table
+    targetKey: 'id',      // Primary key in the User table
+  });
+
+  // User has many Horaire
+  User.hasMany(Horaire, {
+    foreignKey: 'userId', // Foreign key in the Horaire table
+    sourceKey: 'id',      // Primary key in the User table
+  });
+
   // User has many Congees
   User.hasMany(Congee, {
     foreignKey: 'userId', // Foreign key in the Congee table
+    sourceKey: 'id',      // Primary key in the User table
+  });
+
+  // User has many Evaluation
+  User.hasMany(Evaluation, {
+    foreignKey: 'userId', // Foreign key in the Evaluation table
     sourceKey: 'id',      // Primary key in the User table
   });
 };
@@ -78,7 +106,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/congees', congeeRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/evaluations', evaluationRoutes);
-app.use('/api/horaire', horaireRoutes);
+app.use('/api/horaires', horaireRoutes);
 
 
 app.get('/', (req, res) => {

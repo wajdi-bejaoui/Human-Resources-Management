@@ -11,14 +11,14 @@ import {
   import axios from 'axios';
   import Dialog from './dialog'
   import { Link, useNavigate } from "react-router-dom";
-import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
+import { deleteMyHoraires, getMyHoraires } from "../../api/horaireApi";
 
   
 
 
   
-  export function MyCongeesList() {
-    const [congees, setCongees] = useState([]);
+  export function MyHorairesList() {
+    const [horaires, setHoraires] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,49 +28,49 @@ import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
 
 
   useEffect(() => {
-    const fetchCongees = async () => {
+    const fetchHoraires = async () => {
       try {
         const token = localStorage.getItem('token'); 
-        const response = await getMyCongees({
+        const response = await getMyHoraires({
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
 
         console.log(response)
-        setCongees(response);
+        setHoraires(response);
       } catch (err) {
-        setCongees([])
+        setHoraires([])
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCongees();
+    fetchHoraires();
   }, []);
 
 
-  const deleteCongee = async (id) => {
+  const deleteHoraire = async (id) => {
     try {
       console.log("delete called")
       const token = localStorage.getItem('token'); 
 
-      const response = await deleteMyCongees(id, {
+      const response = await deleteMyHoraires(id, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      // Update congees list after successful deletion
-      setCongees((prevCongees) => prevCongees.filter((emp) => emp.id !== id));
+      // Update Horaires list after successful deletion
+      setHoraires((prevHoraires) => prevHoraires.filter((emp) => emp.id !== id));
 
       console.log(response)
-      // alert('Congee deleted successfully');
+      // alert('Horaire deleted successfully');
       // handleClose();  // Close the dialog after successful deletion
     } catch (error) {
-      console.error('Error deleting Congee:', error);
-      alert('Failed to delete Congee');
+      console.error('Error deleting Horaire:', error);
+      alert('Failed to delete Horaire');
     }
   };
 
@@ -81,14 +81,14 @@ import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
         <Card>
           <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
             <Typography variant="h5" color="white">
-              Congees Table
+              Horaires Table
             </Typography>
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Begin/End date", "Type congee", "Nb days", "Status"].map((el) => (
+                {["Date", "Start/End Time", "Status"].map((el) => (
                     <th
                       key={el}
                       className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -104,10 +104,10 @@ import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
                 </tr>
               </thead>
               <tbody>
-                {congees.length > 0 ? congees.map(
-                  ({ id, debut, fin, typeCongee, nbJour,status }, key) => {
+                {horaires.length > 0 ? horaires.map(
+                  ({ id, date, startTime, endTime, status }, key) => {
                     const className = `py-3 px-5 ${
-                      key === congees.length - 1
+                      key === horaires.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
                     }`;
@@ -117,66 +117,52 @@ import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
                         
                         <td className={className}>
                           <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {debut}
+                            {date}
                           </Typography>
-                          <Typography className="text-lg font-normal text-blue-gray-500">
-                            {fin}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          {/* <Chip
-                            variant="gradient"
-                            color={online ? "green" : "blue-gray"}
-                            value={online ? "online" : "offline"}
-                            className="py-0.5 px-2 text-[11px] font-medium w-fit"
-                          /> */}
-                          <Chip
-                            variant="gradient"
-                            color="blue-gray"
-                            value={typeCongee}
-                            className="py-0.5 px-2 text-[11px] font-medium w-fit"
-                          />
                         </td>
                         <td className={className}>
                           <Typography className="text-lg font-semibold text-blue-gray-600">
-                            {nbJour}
+                            {startTime}
+                          </Typography>
+                          <Typography className="text-lg font-normal text-blue-gray-500">
+                            {endTime}
                           </Typography>
                         </td>
                         <td className={className}>
                           <Chip
                             variant="gradient"
-                            color={status === "approved" ? "green" : status === "refused" ? "red" : "orange"}
+                            color={status === "confirmed" ? "green" : status === "refused" ? "red" : "orange"}
                             value={status==0 ? "null" : status}
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />
                           
                         </td>
                         <td className={className}>
-                          <Typography
+                          {/* <Typography
                             as={Link}
-                            to={`/edit-congee/${id}`}
+                            to={`/edit-horaire/${id}`}
                             className="text-lg font-semibold text-blue-gray-600 mb-3 hover:text-green-600"
                           >
                             Edit
-                          </Typography>
+                          </Typography> */}
                           
                           
                           
-                        <Typography
+                        {/* <Typography
                             as="a"
                             href="#"
                             className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
-                            onClick={() => deleteCongee(id)}
+                            onClick={() => deleteHoraire(id)}
                           >
                             Delete
-                          </Typography>
+                          </Typography> */}
                         </td>
                         
                       </tr>
                     );
                   }
                 ) : (
-                  <p>There are no congees</p>
+                  <p>There are no horaires</p>
               )}
               </tbody>
             </table>
@@ -186,5 +172,5 @@ import { deleteMyCongees, getMyCongees } from "../../api/congeeApi";
     );
   }
   
-  export default MyCongeesList;
+  export default MyHorairesList;
   

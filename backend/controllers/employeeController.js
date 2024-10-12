@@ -18,7 +18,7 @@ exports.addEmployee = async (req, res) => {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Email already exists' });
     }
 
-    console.log(req.body)
+    // console.log(req.body)
 
     // Create a new employee record
     const newEmployee = await User.create({
@@ -54,10 +54,10 @@ exports.getEmployeeById = async (req, res) => {
 
 exports.updateEmployee = async (req, res) => {
     try {
-        console.log("in update")
+        // console.log("in update")
       const id = req.params.id;
-      console.log("id"+id)
-      console.log("body",req.body)
+    //   console.log("id"+id)
+    //   console.log("body",req.body)
       const employee = await User.findByPk(id);
 
       if (!employee) {
@@ -74,7 +74,7 @@ exports.updateEmployee = async (req, res) => {
       const [updated] = await User.update(req.body, {
         where: { id: id }
       });
-      console.log(updated)
+    //   console.log(updated)
       if (updated) {
         const updatedEmployee = await User.findByPk(id);
         res.status(200).send({ message: 'Employee updated...', user: updatedEmployee });

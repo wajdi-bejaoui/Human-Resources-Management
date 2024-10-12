@@ -12,6 +12,10 @@ import EditEmployeeForm from './pages/dashboard/edit-employee-form';
 import { Congees } from './pages/dashboard/congees';
 import AddMyCongeeForm from './pages/dashboard/add-my-congee-form';
 import MyCongeesList from './pages/dashboard/my-congees-list';
+import AddMyHoraireForm from './pages/dashboard/add-my-horaire-form';
+import HoraireList from './pages/dashboard/horaires-list';
+import MyHorairesList from './pages/dashboard/my-horaires-list';
+
 
 
 
@@ -29,6 +33,11 @@ function routes() {
         <Route path="/congees" element={<Congees />} />
         <Route path="/add-my-congee" element={<AddMyCongeeForm />} />
         <Route path="/my-congees-list" element={<MyCongeesList />} />
+        <Route path="/add-my-horaire" element={<AddMyHoraireForm />} />
+        <Route path="/horaires" element={<HoraireList />} />
+        <Route path="/my-horaires" element={<MyHorairesList />} />
+
+
         {/* <Route path="/edit-congee/:id" element={<EditEmployeeForm />} /> */}
         <Route path="/" element={<Home />} />
         {/* <Route path="/contact" element={<Contact />} /> */}

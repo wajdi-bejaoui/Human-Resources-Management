@@ -18,6 +18,10 @@ const Congee = sequelize.define('Congee', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  status : {
+    type: DataTypes.STRING,
+    defaultValue: 'pending',
+  },
   typeCongee: {
     type: DataTypes.STRING,
     allowNull: false
@@ -25,6 +29,10 @@ const Congee = sequelize.define('Congee', {
   nbJour: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  file: {
+    type: DataTypes.STRING,  // Store the file path or URL as a string
+    allowNull: true          // You can make it nullable if the file is optional
   },
   userId: { // Add userId field
     type: DataTypes.INTEGER,

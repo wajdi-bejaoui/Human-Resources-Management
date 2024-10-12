@@ -9,6 +9,8 @@ exports.createEvaluation = async (req, res) => {
     }
 
     const evaluationData = req.body;
+    // evaluationData.userId = req.user.id
+
     const evaluation = await Evaluation.create(evaluationData);
     res.status(201).send({ message: 'Evaluation created...', evaluation });
   } catch (err) {
@@ -18,7 +20,13 @@ exports.createEvaluation = async (req, res) => {
 
 exports.getEvaluations = async (req, res) => {
   try {
-    const evaluations = await Evaluation.findAll();
+    const evaluations = await Evaluation.findAll({
+      include: [{
+        model: User,
+        attributes: ['fullname', 'email'], // Include only the fields you need
+        // required: true, // Ensures only evaluations with associated users are returned
+      }]
+    });
     res.status(200).send(evaluations);
   } catch (err) {
     res.status(500).send({ message: err.message });

@@ -9,8 +9,19 @@ const User = require('../models/User'); // Assuming User model contains the role
 exports.createHoraire = async (req, res) => {
   try {
     const horaireData = req.body;
+    horaireData.userId = req.user.id
     const horaire = await Horaire.create(horaireData);
     res.status(201).send({ message: 'Horaire added...', horaire });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.getMyHoraires = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const horaires = await Horaire.findAll({ where: { userId } });
+    res.status(200).send(horaires);
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -68,7 +79,13 @@ exports.rejectHoraire = async (req, res) => {
 // Get all horaires (for RH to see all working hours submitted by users)
 exports.getAllHoraires = async (req, res) => {
   try {
-    const horaires = await Horaire.findAll();
+    const horaires = await Horaire.findAll({
+      include: [{
+        model: User,
+        attributes: ['fullname', 'email'], // Include only the fields you need
+        // required: true, // Ensures only evaluations with associated users are returned
+      }]
+    });
     res.status(200).send(horaires);
   } catch (err) {
     res.status(500).send({ message: err.message });
