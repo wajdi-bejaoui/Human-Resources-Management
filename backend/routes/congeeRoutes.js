@@ -22,7 +22,7 @@ const {
 } = require('../middleware/authentication');
 
 
-router.route('/').post( createCongee).get(getCongees);
+router.route('/').post( createCongee).get(authenticateUser,getCongees);
 
 router.route('/myCongee')
   .post(authenticateUser,fileUpload.single('file'),addMyCongee)

@@ -124,16 +124,22 @@ function AddMyCongeeForm() {
               <div className="w-full flex flex-row items-center justify-center">
                 <div className="w-full max-w-96 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2">Type Congee</label>
-                  <input
+                  <select
                     className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none focus:border-[#98c01d]"
-                    type="text"
                     name="typeCongee"
-                    placeholder="Type Congee"
                     value={congee.typeCongee}
                     onChange={handleInputChange}
                     required
-                  />
+                  >
+                    <option value="" disabled>-- Select Type of Congee --</option>
+                    <option value="sick">Sick Leave</option>
+                    <option value="vacation">Vacation Leave</option>
+                    <option value="maternity">Maternity Leave</option>
+                    <option value="paternity">Paternity Leave</option>
+                    <option value="unpaid">Unpaid Leave</option>
+                  </select>
                 </div>
+
                 {/* <div className="w-full max-w-96 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"></label>
                   <input

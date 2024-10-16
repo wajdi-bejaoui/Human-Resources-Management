@@ -1,6 +1,8 @@
 const Horaire = require('../models/Horairee');
 const User = require('../models/User'); // Assuming User model contains the role information
+const Sequelize = require('sequelize');
 
+const { Op } = require('sequelize'); 
 
 
 
@@ -19,10 +21,28 @@ exports.createHoraire = async (req, res) => {
 
 exports.getMyHoraires = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const horaires = await Horaire.findAll({ where: { userId } });
+    // Extract filter parameters from the request query
+    const { month } = req.query;
+
+    console.log("query",req.query)
+
+     // Initialize where clause for filtering
+     let whereClause = { userId: req.user.id }; // Start with the userId filter
+
+     // Add month filter if provided
+     if (month) {
+      whereClause.date = {
+        [Op.and]: [
+          Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('date')), month),
+          Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('date')), new Date().getFullYear()), // Optionally filter by current year
+        ],
+      };
+    }
+ 
+     const horaires = await Horaire.findAll({ where: whereClause });
     res.status(200).send(horaires);
   } catch (err) {
+    console.log(err)
     res.status(500).send({ message: err.message });
   }
 };

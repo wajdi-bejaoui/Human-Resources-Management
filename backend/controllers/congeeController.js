@@ -42,31 +42,40 @@ exports.getMyCongees = async (req, res) => {
 
 exports.getCongees = async (req, res) => {
   try {
-    // First, create a test user
-// const user = await User.create({
-//   fullname: 'John Doe',
-//   email: 'john.doe@example.com',
-//   password :'123',
-//   role:'RH'
-// });
 
-// // Now, create a congee record and associate it with the user
-// await Congee.create({
-//   debut: '2024-01-01',
-//   fin: '2024-01-10',
-//   typeCongee: 'Paid Leave',
-//   nbJour: 10,
-//   userId: user.id // Associate this congee with the created user
-// });
+    // Extract filter parameters from the request query
+    const { status, typeCongee, startDate, endDate } = req.query;
+
+    console.log("query",req.query)
+
+    // Initialize where clause for filtering
+    let whereClause = {};
+
+    // Add filters dynamically based on provided query parameters
+    if (status) {
+      whereClause.status = status;
+    }
+
+    if (typeCongee) {
+      whereClause.typeCongee = typeCongee;
+    }
+
+    // Optional: Add date range filtering for 'debut' (start date)
+    if (startDate && endDate) {
+      whereClause.debut = {
+        [Op.between]: [new Date(startDate), new Date(endDate)],
+      };
+    }
+
+
     const congees = await Congee.findAll({
+      where: whereClause, // Apply filters
       include: [{
         model: User,
         attributes: ['fullname', 'email'], // Include only the fields you need
         // required: true, // Ensures only congees with associated users are returned
       }]
     });
-
-    // console.log(JSON.stringify(congees, null, 2)); // Check if User data is included
 
     
     // Format the response to include user info with each congee

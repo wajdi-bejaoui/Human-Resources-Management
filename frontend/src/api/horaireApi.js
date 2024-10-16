@@ -22,9 +22,9 @@ export const getHoraires = async (headers) => {
         
 };
 
-export const getMyHoraires = async (headers) => {
+export const getMyHoraires = async ({ params, headers }) => {
 
-    const response = await axios.get(`${apiUrl}/myHoraire`, headers);
+    const response = await axios.get(`${apiUrl}/myHoraire`, { params, headers });
 
     return response.data;
         

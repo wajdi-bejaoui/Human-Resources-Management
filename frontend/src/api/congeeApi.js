@@ -5,6 +5,8 @@ const apiUrl = 'http://localhost:3000/api/congees'
 
 
 
+
+
 export const addMyCongee = async (data, headers) => {
 
     // Log FormData entries
@@ -18,13 +20,11 @@ for (let [key, value] of data.entries()) {
         
 };
 
-export const getCongees = async (data, headers) => {
-
-    const response = await axios.get(`${apiUrl}`, headers);
-
+export const getCongees = async ({ params, headers }) => {
+    const response = await axios.get(apiUrl, { params, headers });
     return response.data;
-        
 };
+
 
 export const getMyCongees = async (headers) => {
 

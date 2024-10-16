@@ -13,14 +13,49 @@ import {
   import { Link, useNavigate } from "react-router-dom";
 import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
 
-  
 
+const typeCongeeList = [
+  {
+    label : 'Sick Leave',
+    value : 'sick'
+  },
+  {
+    label : 'Vacation Leave',
+    value : 'vacation'
+  },
+  {
+    label : 'Maternity Leave',
+    value : 'maternity'
+  },
+  {
+    label : 'Paternity Leave',
+    value : 'paternity'
+  },
+  {
+    label : 'Unpaid Leave',
+    value : 'unpaid'
+  },
+]
+
+const leaveTypes = [
+  { value: "", label: "All" },
+  // { value: "approved", label: "Approved" },
+  // { value: "refused", label: "Refused" },
+  // { value: "pending", label: "Pending" },
+  { value: "sick", label: "Sick Leave" },
+  { value: "vacation", label: "Vacation Leave" },
+  { value: "maternity", label: "Maternity Leave" },
+  { value: "paternity", label: "Paternity Leave" },
+  { value: "unpaid", label: "Unpaid Leave"}
+  ];
 
   
   export function Congees() {
     const [congees, setCongees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState(""); // State to store selected filter
+
 
   // const [open, setOpen] = useState(false);
  
@@ -30,7 +65,23 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
   useEffect(() => {
     const fetchCongees = async () => {
       try {
-        const response = await getCongees();
+        const token = localStorage.getItem('token'); 
+
+        // const filters = {
+        //   status: 'approved',
+        //   typeCongee: 'vacation',
+        //   startDate: '2024-01-01',
+        //   endDate: '2024-01-31',
+        // };
+        const filters = {
+          typeCongee : filter
+        }
+        const response = await getCongees({
+          params : filters,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
 
         console.log(response)
         setCongees(response);
@@ -43,7 +94,7 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
     };
 
     fetchCongees();
-  }, []);
+  }, [filter]);
 
 
   const congeeRefuse = async (id) => {
@@ -129,9 +180,27 @@ import { acceptCongee, getCongees, refuseCongee } from "../../api/congeeApi";
       <div className="mt-8 mb-8 flex flex-col gap-12">
         <Card>
           <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
+            <div className="flex flex-row justify-between items-center">
             <Typography variant="h5" color="white">
               Congees Table
             </Typography>
+            {/* Filter Dropdown */}
+            <div className="px-6">
+              
+              {/* <label className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2">Filter Congees</label> */}
+              <select
+                className=" w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 focus:outline-none focus:border-[#98c01d]"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                {leaveTypes.map((leave) => (
+                <option key={leave.value} value={leave.value}>
+                  {leave.label}
+                </option>
+              ))}
+              </select>
+            </div>
+            </div>
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
             <table className="w-full min-w-[640px] table-auto">

@@ -17,6 +17,7 @@ import HoraireList from './pages/dashboard/horaires-list';
 import MyHorairesList from './pages/dashboard/my-horaires-list';
 import AddEvaluationForm from './pages/dashboard/add-evaluation-form';
 import MyEvaluationsList from './pages/dashboard/my-evaluation-list';
+import MyReportsList from './pages/dashboard/my-reports-list';
 
 
 
@@ -40,6 +41,8 @@ function routes() {
         <Route path="/my-horaires" element={<MyHorairesList />} />
         <Route path="/add-evaluation/:id" element={<AddEvaluationForm />} />
         <Route path="/my-evaluations-list" element={<MyEvaluationsList />} />
+        <Route path="/my-reports-list" element={<MyReportsList />} />
+
 
 
 
