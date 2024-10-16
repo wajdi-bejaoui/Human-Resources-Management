@@ -181,7 +181,7 @@ import { acceptHoraire, refuseHoraire, getHoraires } from "../../api/horaireApi"
                         <td className={className}>
                           <Chip
                             variant="gradient"
-                            color={status === "confirmed" ? "green" : status === "refused" ? "red" : "orange"}
+                            color={status === "confirmed" ? "green" : status === "rejected" ? "red" : "orange"}
                             value={status==0 ? "null" : status}
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />

@@ -7,8 +7,13 @@ const {
   getEvaluations,
   getEvaluationById,
   updateEvaluation,
-  deleteEvaluation
+  deleteEvaluation,
+  getMyEvaluation
 } = require('../controllers/EvaluationController');
+
+
+router.route('/myEvaluation')
+  .get(authenticateUser, getMyEvaluation);
 
 router.route('/')
   .post(authenticateUser, createEvaluation)

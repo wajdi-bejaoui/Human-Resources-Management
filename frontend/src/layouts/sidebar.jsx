@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from 'jwt-decode';
 
 
-function sidebar() {
+function Sidebar() {
     const navigate = useNavigate();
     const [role, setRole] = useState(null);
 
@@ -37,7 +37,7 @@ function sidebar() {
     <><div className="font-poppins antialiased ">
     <div
       id="view"
-      x-data="{ sidenav: true }"
+      // x-data="{ sidenav: true }"
     >
       <button
         // @click="sidenav = true"
@@ -52,14 +52,14 @@ function sidebar() {
           <path
             fillRule="evenodd"
             d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clip-rule="evenodd"
+            clipRule="evenodd"
           ></path>
         </svg>
       </button>
       <div
         id="sidebar"
         className="bg-white h-screen md:block px-3 w-30 md:w-80 lg:w-80 overflow-x-hidden transition-transform duration-300 ease-in-out"
-        x-show="sidenav"
+        // x-show="sidenav"
         // @click.away="sidenav = false"
       >
         <div className="space-y-6 md:space-y-10 mt-20 ">
@@ -134,6 +134,23 @@ function sidebar() {
                 ></path>
               </svg>
               <span className="">My Congees</span>
+            </Link>)}
+            {role === 'employee' && (
+            <Link
+              to="my-evaluations-list"
+              className="text-xl font-medium text-gray-700 py-4 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+            >
+              <svg
+                className="w-6 h-6 fill-current inline-block mr-3"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
+                ></path>
+              </svg>
+              <span className="">My Evaluations</span>
             </Link>)}
             {/* {role === 'RH' && (
 
@@ -351,4 +368,4 @@ function sidebar() {
   )
 }
 
-export default sidebar
+export default Sidebar

@@ -3,13 +3,10 @@ import {
     CardHeader,
     CardBody,
     Typography,
-    Avatar,
     Chip,
 
   } from "@material-tailwind/react";
   import React, { useEffect, useState } from 'react';
-  import axios from 'axios';
-  import Dialog from './dialog'
   import { Link, useNavigate } from "react-router-dom";
 import { deleteMyHoraires, getMyHoraires } from "../../api/horaireApi";
 
@@ -131,7 +128,7 @@ import { deleteMyHoraires, getMyHoraires } from "../../api/horaireApi";
                         <td className={className}>
                           <Chip
                             variant="gradient"
-                            color={status === "confirmed" ? "green" : status === "refused" ? "red" : "orange"}
+                            color={status === "confirmed" ? "green" : status === "rejected" ? "red" : "orange"}
                             value={status==0 ? "null" : status}
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />

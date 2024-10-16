@@ -21,7 +21,7 @@ export const getEvaluations = async (headers) => {
         
 };
 
-export const getMyEvaluation = async (headers) => {
+export const getMyEvaluations = async (headers) => {
 
     const response = await axios.get(`${apiUrl}/myEvaluation`, headers);
 

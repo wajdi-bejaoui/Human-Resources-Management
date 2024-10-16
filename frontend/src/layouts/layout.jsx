@@ -1,11 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { IconButton } from "@material-tailwind/react";
-import {
-  DashboardNavbar,
-  Configurator,
-  Footer,
-} from "../widgets/layout";
+
 import routes from "../routes";
 import Employees from "../pages/dashboard/employees";
 import Navbar from './navbar'

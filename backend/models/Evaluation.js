@@ -13,7 +13,11 @@ const Evaluation = sequelize.define('Evaluation', {
     allowNull: false,
   },
   periodRated: {
-    type: DataTypes.STRING, // e.g., "Q1 2024", "Year 2023"
+    type: DataTypes.STRING, // e.g., "Q1 , full year"
+    allowNull: false,
+  },
+  year: {
+    type: DataTypes.STRING, // e.g., "2023"
     allowNull: false,
   },
   evaluationDate: {

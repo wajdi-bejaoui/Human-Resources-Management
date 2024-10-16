@@ -10,6 +10,7 @@ exports.createEvaluation = async (req, res) => {
 
     const evaluationData = req.body;
     // evaluationData.userId = req.user.id
+    evaluationData.evaluationDate = new Date(); // Add the current date
 
     const evaluation = await Evaluation.create(evaluationData);
     res.status(201).send({ message: 'Evaluation created...', evaluation });
@@ -28,6 +29,20 @@ exports.getEvaluations = async (req, res) => {
       }]
     });
     res.status(200).send(evaluations);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.getMyEvaluation = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const evaluation = await Evaluation.findAll({ where: { userId } });
+    if (!evaluation) {
+      res.status(404).send({ message: 'Evaluation not found' });
+    } else {
+      res.status(200).send(evaluation);
+    }
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
