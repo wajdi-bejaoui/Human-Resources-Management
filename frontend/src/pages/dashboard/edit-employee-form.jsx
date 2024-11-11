@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEmployee,clearStatus } from '../../store/employees/employeeSlice'; // Update the path as needed
+
 function EditEmployeeForm() {
   const { id } = useParams(); // Get employee ID from the URL
   const [employee, setEmployee] = useState({
@@ -11,9 +14,12 @@ function EditEmployeeForm() {
     confirmPassword: '',
     image: null,
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const [success, setSuccess] = useState(null);
+
+  const dispatch = useDispatch();
+  const { loading, error, successMessage } = useSelector((state) => state.employees);
 
   useEffect(() => {
     // Fetch the employee data using the ID
@@ -39,48 +45,22 @@ function EditEmployeeForm() {
     setEmployee({ ...employee, [name]: value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("update",id)
+    dispatch(updateEmployee({ id, employeeData: employee }));
+  };
+
   const handleImageChange = (e) => {
     setEmployee({ ...employee, image: e.target.files[0] });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const token = localStorage.getItem('token'); 
-
-      const formData = new FormData();
-      console.log(employee.fullname)
-      formData.append('fullname', employee.fullname);
-      formData.append('email', employee.email);
-      if (employee.password)
-        formData.append('password', employee.password);
-      if (employee.image) {
-        formData.append('image', employee.image);
-      }
-
-      for (let pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-      }
-
-      const response = await axios.patch(`http://localhost:3000/api/employees/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      setError(null);
-      setSuccess(response.data.message);
-
-      console.log(response.data);
-    } catch (err) {
-      setSuccess(null);
-      setError(err.response?.data?.message || 'Failed to update employee');
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    // Cleanup function to clear error and success state on unmount
+    return () => {
+      dispatch(clearStatus());
+    };
+  }, [dispatch]);
 
   return (
     <div className="bg-gray-100 h-screen">
@@ -102,7 +82,7 @@ function EditEmployeeForm() {
               <h1 className="font-medium text-2xl">Edit Employee</h1>
             </div>
             {error && <p className="text-red-600 bg-red-100 border border-red-400 rounded p-2 mb-4">{error}</p>}
-            {success && <p className="text-green-600 bg-green-100 border border-green-400 rounded p-2 mb-4">{success}</p>}
+            {successMessage && <p className="text-green-600 bg-green-100 border border-green-400 rounded p-2 mb-4">{successMessage}</p>}
 
             <div className="flex flex-wrap -mx-3 mb-6 items-center justify-center">
               <div className="w-full flex flex-row items-center justify-center">
@@ -188,6 +168,8 @@ function EditEmployeeForm() {
                 >
                   {loading ? 'Updating...' : 'Update Employee'}
                 </button>
+                  {error && <p className="text-red-500">{error}</p>}
+                  {successMessage && <p className="text-green-500">{successMessage}</p>}
               </div>
             </div>
           </form>

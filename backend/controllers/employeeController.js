@@ -62,7 +62,7 @@ exports.updateEmployee = async (req, res) => {
 
       if (!employee) {
         console.log("employee dont  exist")
-        res.status(404).send({ message: 'Employee not found' });
+        return res.status(404).send({ message: 'Employee not found' });
       }
 
       // Check if the password is being updated

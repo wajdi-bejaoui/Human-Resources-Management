@@ -12,7 +12,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchEmployees,deleteEmployee } from '../../store/employees/employeeSlice';
+import { fetchEmployees,deleteEmployee,clearStatus } from '../../store/employees/employeeSlice';
 
 
 export function Employees() {
@@ -50,6 +50,13 @@ export function Employees() {
     console.log("handleDeleteEmployee called")
     dispatch(deleteEmployee(id));
   };
+
+  useEffect(() => {
+    // Cleanup function to clear error and success state on unmount
+    return () => {
+      dispatch(clearStatus());
+    };
+  }, [dispatch]);
 
   if (status === 'loading') return <div>Loading...</div>;
   if (status === 'failed') return <div>Error: {error}</div>;

@@ -20,7 +20,19 @@ export const deleteEmployees = async (id) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+    return response;   
+};
 
-    return response;
-        
+
+export const updateEmployees = async (id,formData) => {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.patch(`http://localhost:3000/api/employees/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+    return response;   
 };
