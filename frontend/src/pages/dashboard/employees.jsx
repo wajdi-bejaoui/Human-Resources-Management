@@ -10,10 +10,9 @@ import {
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-import { getEmployees } from "../../api/employeeApi";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchEmployees } from '../../store/employees/employeeSlice';
+import { fetchEmployees,deleteEmployee } from '../../store/employees/employeeSlice';
 
 
 export function Employees() {
@@ -47,18 +46,9 @@ export function Employees() {
     setFilteredEmployees(filtered);
   };
 
-  const deleteEmployee = async (id) => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/api/employees/${id}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-
-      setFilteredEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
-    } catch (error) {
-      console.error('Error deleting employee:', error);
-      alert('Failed to delete employee');
-    }
+  const handleDeleteEmployee = (id) => {
+    console.log("handleDeleteEmployee called")
+    dispatch(deleteEmployee(id));
   };
 
   if (status === 'loading') return <div>Loading...</div>;
@@ -191,7 +181,7 @@ export function Employees() {
                           as="a"
                           href="#"
                           className="text-lg font-semibold text-blue-gray-600 hover:text-red-600"
-                          onClick={() => deleteEmployee(id)}
+                          onClick={() => handleDeleteEmployee(id)}
                         >
                           Delete
                         </Typography>
