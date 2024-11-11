@@ -12,67 +12,57 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import { getEmployees } from "../../api/employeeApi";
 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchEmployees } from '../../store/employees/employeeSlice';
+
+
 export function Employees() {
-  const [employees, setEmployees] = useState([]);
-  const [filteredEmployees, setFilteredEmployees] = useState([]); // Filtered employees
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // State to store search term
+
+  const dispatch = useDispatch();
+  const { data: employees, status, error } = useSelector((state) => state.employees);
+
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        setLoading(true);
+    console.log(employees)
 
-        const response = await getEmployees();
-        setEmployees(response.users);
-        setFilteredEmployees(response.users); // Set filtered employees initially to all employees
-      } catch (err) {
-        setEmployees([]);
-        setFilteredEmployees([]);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEmployees();
-  }, []);
-
-  const deleteEmployee = async (id) => {
-    try {
-      console.log("delete called");
-      const token = localStorage.getItem('token');
-
-      const response = await axios.delete(`http://localhost:3000/api/employees/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      // Update employees list after successful deletion
-      setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
-      setFilteredEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
-
-      console.log(response);
-    } catch (error) {
-      console.error('Error deleting employee:', error);
-      alert('Failed to delete employee');
+    if (status === 'idle') {
+      dispatch(fetchEmployees());
     }
-  };
+  }, [dispatch, status]);
 
-  // Function to handle search input change
+  useEffect(() => {
+    setFilteredEmployees(employees);
+  }, [employees]);
+
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
 
-    // Filter employees based on search term (match name or email)
     const filtered = employees.filter((employee) =>
       employee.fullname.toLowerCase().includes(value) ||
       employee.email.toLowerCase().includes(value)
     );
     setFilteredEmployees(filtered);
   };
+
+  const deleteEmployee = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:3000/api/employees/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      setFilteredEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      alert('Failed to delete employee');
+    }
+  };
+
+  if (status === 'loading') return <div>Loading...</div>;
+  if (status === 'failed') return <div>Error: {error}</div>;
 
   return (
     <div className="mt-8 mb-8 flex flex-col gap-12">
