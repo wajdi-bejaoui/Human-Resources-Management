@@ -5,6 +5,23 @@ const User = require('../models/User');
 exports.createCongee = async (req, res) => {
   try {
     const congeeData = req.body;
+    // Calculate the number of days
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(congeeData.debut);
+    const secondDate = new Date(congeeData.fin);
+    const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)) + 1; // Add 1 to include both start and end dates
+    console.log(congeeData.diffDays)
+    console.log("congeedata",congeeData)
+
+
+    congeeData.nbJour =diffDays
+
+    // Create the congee record
+    // const congee = await Congee.create({ 
+    //   ...congeeData, 
+    //   nbJour: diffDays 
+    // });
+    console.log(congeeData.nbJour)
     const congee = await Congee.create(congeeData);
     res.status(201).send({ message: 'Congee added...', congee });
   } catch (err) {
@@ -17,6 +34,15 @@ exports.addMyCongee = async (req, res) => {
 
     const user = req.user;
     const congeeData = req.body;
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(congeeData.debut);
+    const secondDate = new Date(congeeData.fin);
+    const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)) + 1; // Add 1 to include both start and end dates
+    console.log(congeeData.diffDays)
+    console.log("congeedata",congeeData)
+
+
+    congeeData.nbJour =diffDays
     congeeData.userId = user.id;
     congeeData.status = "pending";
     const congee = await Congee.create(congeeData);
